@@ -5,3 +5,7 @@ Route::get('/mahasiswa', function () {
  $data = Mahasiswa::all();
  return view('mahasiswa.index', compact('data'));
 });
+
+Route::get('/ArtikelController', function () {
+    return 'Halo, ini halaman artikel baru!';
+});
