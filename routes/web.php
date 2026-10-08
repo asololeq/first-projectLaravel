@@ -2,6 +2,8 @@
 
 use App\Models\Mahasiswa;
 use App\Http\Controllers\MatakuliahController;
+use App\Http\Controllers\MahasiswaController;
+
 Route::get('/mahasiswa', function () {
  $data = Mahasiswa::all();
  return view('mahasiswa.index', compact('data'));
