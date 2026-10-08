@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 class Mahasiswa extends Model
 {
- use HasFactory;
- protected $fillable = ['nim', 'nama', 'email', 'prodi', 'semester'];
+    use HasFactory;
+    protected $fillable = ['nim', 'nama', 'email', 'prodi', 'semester'];
+    public function nilai()
+    {
+        return $this->hasMany(\App\Models\NilaiMatakuliah::class, 'mahasiswa_id');
+    }
 }
