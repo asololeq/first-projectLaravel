@@ -19,8 +19,7 @@ Route::get('/ArtikelController', function () {
     return 'Halo, ini halaman artikel baru!';
 });
 
-Route::get('/matakuliah', [MatakuliahController::class, 'index']);
-Route::post('/matakuliah', [MatakuliahController::class, 'store']);
+Route::resource("matakuliah", MatakuliahController::class);
 
 // Route Form & Insert
 Route::get('/tambah', [QueryBuilderDemoController::class, 'formTambah']);

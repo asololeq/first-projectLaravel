@@ -77,6 +77,7 @@
                         <th>SKS</th>
                         <th>Semester</th>
                         <th>Dosen Pengampu</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,6 +88,19 @@
                         <td>{{ $mk->sks }}</td>
                         <td>Semester {{ $mk->semester }}</td>
                         <td>{{ $mk->dosen ? $mk->dosen->name : 'Belum Ditentukan' }}</td>
+                        <td>
+                            <a href="{{ route("matakuliah.show", $mk) }}" class="btn btn-info btn-sm">Detail</a>
+                            <a href="{{ route("matakuliah.edit", $mk) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route("matakuliah.destroy", $mk) }}"
+                                method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method("DELETE")
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     @empty
                     <tr>
