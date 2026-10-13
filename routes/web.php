@@ -4,11 +4,14 @@ use App\Models\Mahasiswa;
 use App\Http\Controllers\MatakuliahController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\QueryBuilderDemoController;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/statistik-prodi', [QueryBuilderDemoController::class, 'statistikProdi']);
 
-Route::get('/mahasiswa', function () {
- $data = Mahasiswa::all();
+Route::get("/mahasiswa", function () {
+    $data = DB::table("mahasiswas")
+        ->orderBy("nama", "asc")
+        ->paginate(10);
  return view('mahasiswa.index', compact('data'));
 });
 
