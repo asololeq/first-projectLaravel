@@ -1,63 +1,24 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Mahasiswa</title>
-    <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+@extends('layouts.app', ['title' => 'Mahasiswa'])
 
-<!-- NAVBAR UTAMA -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-  <div class="container">
-    <a class="navbar-brand" href="#">SIAKAD</a>
-    <div class="navbar-nav">
-      <a class="nav-link active" href="/mahasiswa">Data Mahasiswa</a>
-      <a class="nav-link" href="/matakuliah">Data Mata Kuliah</a>
+@section('content')
+    <div class="page-heading">
+        <div><p class="eyebrow">Directory akademik</p><h1>Mahasiswa</h1><p class="subtitle">Kelola profil, program studi, dan riwayat akademik mahasiswa.</p></div>
+        <a class="button button-primary" href="{{ route('mahasiswa.create') }}">+ Tambah mahasiswa</a>
     </div>
-  </div>
-</nav>
-
-<div class="container my-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Daftar Mahasiswa</h5>
-            <!-- Tombol Cepat ke Mata Kuliah -->
-            <a href="/matakuliah" class="btn btn-light btn-sm">Ke Halaman Mata Kuliah &rarr;</a>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped table-hover align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>NIM</th>
-                        <th>Nama</th>
-                        <th>Prodi</th>
-                        <th>Semester</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($data as $mhs)
-                    <tr>
-                        <td><span class="badge bg-secondary">{{ $mhs->nim }}</span></td>
-                        <td><strong>{{ $mhs->nama }}</strong></td>
-                        <td>{{ $mhs->prodi }}</td>
-                        <td>Semester {{ $mhs->semester }}</td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="4" class="text-center text-muted">Belum ada data mahasiswa.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-            <div class="mt-3">
-                {{ $data->links() }}
-            </div>
-        </div>
-    </div>
-</div>
-
-</body>
-</html>
+    <section class="stats-row">
+        <div class="metric-card"><span class="metric-label">Total ditampilkan</span><strong>{{ $mahasiswas->total() }}</strong><small>Data terdaftar</small></div>
+        <div class="metric-card accent-card"><span class="metric-label">Halaman aktif</span><strong>{{ $mahasiswas->currentPage() }}</strong><small>Dari {{ $mahasiswas->lastPage() }} halaman</small></div>
+        <div class="metric-card"><span class="metric-label">Per halaman</span><strong>{{ $mahasiswas->perPage() }}</strong><small>Maksimum data</small></div>
+    </section>
+    <section class="panel">
+        <div class="panel-heading"><div><h2>Daftar mahasiswa</h2><p>Data diurutkan berdasarkan nama dan relasi nilai dimuat dengan eager loading.</p></div><span class="status-pill">{{ $mahasiswas->total() }} records</span></div>
+        <div class="table-wrap"><table><thead><tr><th>Mahasiswa</th><th>NIM</th><th>Program studi</th><th>Semester</th><th class="align-right">Aksi</th></tr></thead><tbody>
+            @forelse ($mahasiswas as $mahasiswa)
+                <tr><td><div class="person-cell"><span class="avatar">{{ strtoupper(substr($mahasiswa->nama, 0, 1)) }}</span><div><strong>{{ $mahasiswa->nama }}</strong><small>{{ $mahasiswa->email ?: 'Email belum diisi' }}</small></div></div></td><td class="muted-text">{{ $mahasiswa->nim }}</td><td><span class="tag">{{ $mahasiswa->prodi }}</span></td><td>Semester {{ $mahasiswa->semester }}</td><td class="align-right action-cell"><a class="text-link" href="{{ route('mahasiswa.show', $mahasiswa) }}">Detail</a><a class="text-link" href="{{ route('mahasiswa.edit', $mahasiswa) }}">Edit</a><form action="{{ route('mahasiswa.destroy', $mahasiswa) }}" method="POST" onsubmit="return confirm('Hapus data mahasiswa ini?')">@csrf @method('DELETE')<button class="text-button danger-text" type="submit">Hapus</button></form></td></tr>
+            @empty
+                <tr><td class="empty-state" colspan="5">Belum ada data mahasiswa.</td></tr>
+            @endforelse
+        </tbody></table></div>
+        @if ($mahasiswas->hasPages())<div class="pagination-wrap">{{ $mahasiswas->links() }}</div>@endif
+    </section>
+@endsection

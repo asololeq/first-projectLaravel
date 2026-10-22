@@ -1,29 +1,7 @@
-<h2>{{ $matakuliah->nama_mk }}</h2>
+@extends('layouts.app', ['title' => $matakuliah->nama_mk])
 
-<p>Kode: {{ $matakuliah->kode_mk }}</p>
-<p>Dosen: {{ $matakuliah->dosen->name ?? "-" }}</p>
-
-<h3>Daftar Mahasiswa</h3>
-
-<table border="1" cellpadding="8">
-    <thead>
-        <tr>
-            <th>NIM</th>
-            <th>Nama</th>
-            <th>Nilai</th>
-        </tr>
-    </thead>
-    <tbody>
-        @forelse ($matakuliah->nilai as $nilai)
-            <tr>
-                <td>{{ $nilai->mahasiswa->nim }}</td>
-                <td>{{ $nilai->mahasiswa->nama }}</td>
-                <td>{{ $nilai->nilai }}</td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="3">Belum ada mahasiswa.</td>
-            </tr>
-        @endforelse
-    </tbody>
-</table>
+@section('content')
+    <div class="page-heading compact-heading"><div><p class="eyebrow">Detail katalog</p><h1>{{ $matakuliah->nama_mk }}</h1><p class="subtitle">{{ $matakuliah->kode_mk }} · Semester {{ $matakuliah->semester }}</p></div><div class="heading-actions"><a class="button button-ghost" href="{{ route('matakuliah.index') }}">Kembali</a><a class="button button-primary" href="{{ route('matakuliah.edit', $matakuliah) }}">Edit mata kuliah</a></div></div>
+    <section class="hero-detail"><div><span class="eyebrow light-eyebrow">Mata kuliah aktif</span><h2>{{ $matakuliah->nama_mk }}</h2><p>{{ $matakuliah->sks }} SKS · Diampu oleh {{ $matakuliah->dosen->name ?? 'belum ditentukan' }}</p></div><span class="hero-code">{{ $matakuliah->kode_mk }}</span></section>
+    <section class="panel"><div class="panel-heading"><div><h2>Mahasiswa terdaftar</h2><p>Daftar peserta dimuat melalui relasi Eloquent `nilai.mahasiswa`.</p></div><span class="status-pill">{{ $matakuliah->nilai->count() }} peserta</span></div><div class="table-wrap"><table><thead><tr><th>Mahasiswa</th><th>NIM</th><th>Program studi</th><th>Nilai</th></tr></thead><tbody>@forelse ($matakuliah->nilai as $nilai)<tr><td><strong>{{ $nilai->mahasiswa->nama ?? '-' }}</strong></td><td class="muted-text">{{ $nilai->mahasiswa->nim ?? '-' }}</td><td>{{ $nilai->mahasiswa->prodi ?? '-' }}</td><td><span class="grade-pill">{{ $nilai->nilai }}</span></td></tr>@empty<tr><td class="empty-state" colspan="4">Belum ada mahasiswa yang mengambil mata kuliah ini.</td></tr>@endforelse</tbody></table></div></section>
+@endsection
